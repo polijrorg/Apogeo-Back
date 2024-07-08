@@ -12,9 +12,8 @@ import IUsersRepository from '../repositories/IUsersRepository';
 interface IRequest {
   name: string;
   email: string;
-  cpf: string;
-  phone: string;
   password: string;
+  language: string;
 }
 
 @injectable()
@@ -31,20 +30,19 @@ export default class CreateUserService {
   ) { }
 
   public async execute({
-    cpf, email, name, password, phone,
+    name, email, password, language,
   }: IRequest): Promise<Users> {
-    const userAlreadyExists = await this.usersRepository.findByEmailPhoneOrCpf(email, phone, cpf);
+    const userAlreadyExists = await this.usersRepository.findByEmailWithRelations(email);
 
-    if (userAlreadyExists) throw new AppError('User with same name, phone or cpf already exists');
+    if (userAlreadyExists) throw new AppError('User with same email already exists');
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
     const user = this.usersRepository.create({
       name,
       email: email.toLowerCase(),
-      cpf,
       password: hashedPassword,
-      phone,
+      language,
     });
 
     const templateDataFile = path.resolve(__dirname, '..', 'views', 'create_account.hbs');
