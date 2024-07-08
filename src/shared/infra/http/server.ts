@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import 'dotenv/config';
+import path from 'path';
 
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
@@ -39,6 +40,8 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     message: 'Internal Server Error',
   });
 });
+
+app.use('/docs', express.static(path.join(__dirname, '..', '..', '..', '..', 'docs')));
 
 app.listen(process.env.PORT || 3333, () => {
   console.log(`Server started on port ${process.env.PORT || 3333}`);
