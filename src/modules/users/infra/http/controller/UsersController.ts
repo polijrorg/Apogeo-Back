@@ -8,9 +8,8 @@ export default class UserController {
     const {
       name,
       email,
-      cpf,
-      phone,
       password,
+      language,
     } = req.body;
 
     const createUser = container.resolve(CreateUserService);
@@ -18,9 +17,8 @@ export default class UserController {
     const user = await createUser.execute({
       name,
       email,
-      cpf,
-      phone,
       password,
+      language,
     });
 
     user.password = '###';

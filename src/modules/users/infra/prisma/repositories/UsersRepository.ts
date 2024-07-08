@@ -19,14 +19,6 @@ export default class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async findByEmailPhoneOrCpf(email: string, phone: string, cpf: string): Promise<Users | null> {
-    const user = await this.ormRepository.findFirst({
-      where: { OR: [{ email }, { phone }, { cpf }] },
-    });
-
-    return user;
-  }
-
   public async create(data: ICreateUserDTO): Promise<Users> {
     const user = await this.ormRepository.create({ data });
 
