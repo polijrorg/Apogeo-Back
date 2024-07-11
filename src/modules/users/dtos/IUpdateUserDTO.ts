@@ -1,4 +1,4 @@
-interface ICreateUserDTO {
+interface IUpdateUserDTO {
   name: string;
   email: string;
   password: string;
@@ -6,4 +6,4 @@ interface ICreateUserDTO {
   phone: string;
 }
 
-export default ICreateUserDTO;
+export default IUpdateUserDTO;

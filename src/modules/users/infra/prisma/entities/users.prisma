@@ -4,6 +4,7 @@ model Users {
   email      String
   password   String
   language   String
+  phone      String
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
