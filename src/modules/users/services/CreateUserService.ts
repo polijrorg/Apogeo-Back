@@ -14,6 +14,7 @@ interface IRequest {
   email: string;
   password: string;
   language: string;
+  phone: string;
 }
 
 @injectable()
@@ -30,7 +31,7 @@ export default class CreateUserService {
   ) { }
 
   public async execute({
-    name, email, password, language,
+    name, email, password, language, phone,
   }: IRequest): Promise<Users> {
     const userAlreadyExists = await this.usersRepository.findByEmailWithRelations(email);
 
@@ -43,6 +44,7 @@ export default class CreateUserService {
       email: email.toLowerCase(),
       password: hashedPassword,
       language,
+      phone,
     });
 
     const templateDataFile = path.resolve(__dirname, '..', 'views', 'create_account.hbs');
