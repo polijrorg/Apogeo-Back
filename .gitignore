@@ -13,3 +13,4 @@ dist/
 
 # orm
 ormconfig.json
+sendgrid.env
