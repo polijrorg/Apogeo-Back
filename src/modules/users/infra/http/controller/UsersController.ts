@@ -6,6 +6,9 @@ import DeleteUserService from '@modules/users/services/DeleteUserService';
 import ReadAllUsersService from '@modules/users/services/ReadAllUsersService';
 import ReadUserByIdService from '@modules/users/services/ReadUserByIdService';
 import UpdateUserService from '@modules/users/services/UpdateUserService';
+import SendPinToUserEmailService from '@modules/users/services/SendPinToUserEmailService';
+import VerifyPinService from '@modules/users/services/VerifyPinService';
+import resetPasswordService from '@modules/users/services/resetPasswordService';
 
 export default class UserController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -102,6 +105,43 @@ export default class UserController {
     user.password = '###';
 
     return res.status(201).json(user);
+  }
+
+  public async sendPin(req: Request, res: Response): Promise<Response> {
+    const { email } = req.body;
+
+    const sendPinToUserEmail = container.resolve(SendPinToUserEmailService);
+
+    const user = await sendPinToUserEmail.execute({
+      email,
+    });
+
+    return res.status(201).json({id: user.id});
+  }
+
+  public async verifyPin(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const { pin } = req.body;
+
+    const verifyPin = container.resolve(VerifyPinService);
+
+    const user = await verifyPin.execute({
+      id,
+      pin,
+    });
+
+    return res.status(201).json({id: user.id});
+  }
+
+  public async resetPassword(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    const resetPassword = container.resolve(resetPasswordService);
+
+    const user = await resetPassword.execute({id, password});
+
+    return res.status(201).json({id: user.id});
   }
 
 }

@@ -9,12 +9,14 @@ generator client {
 }
 
 model Users {
-  id         String   @id @default(uuid())
-  name       String   @unique
-  email      String
+  id         String    @id @default(uuid())
+  name       String
+  email      String    @unique
   password   String
   language   String
   phone      String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  pin        String?
+  pinExpires DateTime?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
 }

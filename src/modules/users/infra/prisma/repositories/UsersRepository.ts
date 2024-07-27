@@ -52,9 +52,23 @@ export default class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async update(id: string, data: IUpdateUserDTO): Promise<Users> {
-    const user = await this.ormRepository.update({ where: { id }, data });
-
-    return user;
+  public update(id: string, data: IUpdateUserDTO): Promise<Users> {
+    return this.ormRepository.update({ where: { id }, data });
   }
+
+  public sendPinToUserEmail(email: string, pin: string, pinExpires: Date): Promise<Users> {
+    return this.ormRepository.update({
+      where: { email },
+      data: { pin, pinExpires },
+    });
+
+  }
+
+  public resetPassword(id: string, password: string): Promise<Users> {
+    return this.ormRepository.update({
+      where: { id },
+      data: { password },
+    });
+  }
+
 }
