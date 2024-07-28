@@ -8,7 +8,7 @@ import ReadUserByIdService from '@modules/users/services/ReadUserByIdService';
 import UpdateUserService from '@modules/users/services/UpdateUserService';
 import SendPinToUserEmailService from '@modules/users/services/SendPinToUserEmailService';
 import VerifyPinService from '@modules/users/services/VerifyPinService';
-import resetPasswordService from '@modules/users/services/resetPasswordService';
+import ResetPasswordService from '@modules/users/services/ResetPasswordService';
 
 export default class UserController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -137,7 +137,7 @@ export default class UserController {
     const { id } = req.params;
     const { password } = req.body;
 
-    const resetPassword = container.resolve(resetPasswordService);
+    const resetPassword = container.resolve(ResetPasswordService);
 
     const user = await resetPassword.execute({id, password});
 
