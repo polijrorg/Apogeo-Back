@@ -24,7 +24,7 @@ export default class SendPinToUserEmailService {
     const userAlreadyExists = await this.usersRepository.findByEmailWithRelations(email);
     if (!userAlreadyExists) throw new AppError('User with this email does not exist');
     
-    const expiration = 5;
+    const expiration = 15;
     const pin = Math.floor(Math.random() * 9999).toString();
     const data = new Date();
     data.setMinutes(data.getMinutes() + expiration);
@@ -39,8 +39,8 @@ export default class SendPinToUserEmailService {
       to: email, 
       from: 'tassyla.lima@polijunior.com.br', 
       subject: 'Apogeo | Recuperação de senha',
-      text: user.name + ', seu pin para recuperação de senha é: ' + pin + '. Ele expira em ' + expiration + ' minutos.',
-      html: user.name + ', seu pin para recuperação de senha é: <strong>' + pin + '</strong>. Ele expira em ' + expiration + ' minutos.',
+      text: user.name + ', seu pin para recuperação de senha é: ' + pin + '. O processo de recuperação expira em ' + expiration + ' minutos.',
+      html: user.name + ', seu pin para recuperação de senha é: <strong>' + pin + '</strong>. O processo de recuperação expira em ' + expiration + ' minutos.',
     };
 
     try {
