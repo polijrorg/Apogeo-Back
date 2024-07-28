@@ -135,11 +135,11 @@ export default class UserController {
 
   public async resetPassword(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
-    const { password } = req.body;
+    const { pin, password } = req.body;
 
     const resetPassword = container.resolve(ResetPasswordService);
 
-    const user = await resetPassword.execute({id, password});
+    const user = await resetPassword.execute({id, pin, password});
 
     return res.status(201).json({id: user.id});
   }
