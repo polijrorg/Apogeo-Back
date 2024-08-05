@@ -12,6 +12,7 @@ import IUsersRepository from '../repositories/IUsersRepository';
 interface IRequest {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 @injectable()
@@ -24,7 +25,7 @@ export default class AuthenticateUserService {
     private hashProvider: IHashProvider,
   ) { }
 
-  public async execute({ email, password }: IRequest): Promise<{ user: Users, token: string }> {
+  public async execute({ email, password, rememberMe }: IRequest): Promise<{ user: Users, token: string }> {
     const user = await this.usersRepository.findByEmailWithRelations(email);
 
     if (!user) {
@@ -37,7 +38,8 @@ export default class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination', 401);
     }
 
-    const { secret, expiresIn } = authConfig.jwt;
+    const { secret, expiresInShort, expiresInNever } = authConfig.jwt;
+    const expiresIn = rememberMe ? expiresInNever : expiresInShort;
 
     const token = sign({}, secret, {
       subject: user.id,
