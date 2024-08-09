@@ -30,9 +30,12 @@ export default class UserController {
       phone,
     });
 
-    user.password = '###';
-
-    return res.status(201).json(user);
+    return res.status(201).json({
+      ...user,
+      password: undefined,
+      pin: undefined,
+      pinExpires: undefined,
+    });
   }
 
   public async readAll(req: Request, res: Response): Promise<Response> {
@@ -40,34 +43,36 @@ export default class UserController {
     const readUsers = container.resolve(ReadAllUsersService);
 
     const users = await readUsers.execute();
-
-    if(users) {
-        users.forEach(user => {
-        user.password = '###';
-      });
-    }
     
-    return res.status(201).json(users);
+    return res.status(201).json(users?.map(user => {
+      return {
+        ...user,
+        password: undefined,
+        pin: undefined,
+        pinExpires: undefined,
+      };
+    }));
   }
 
   public async readById(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
-
+    const { id } = req.token;
+    
     const readUser = container.resolve(ReadUserByIdService);
 
     const user = await readUser.execute({
       id,
     });
 
-    if(user){
-      user.password = '###';
-    }
-
-    return res.status(201).json(user);
+    return res.status(201).json({
+      ...user,
+      password: undefined,
+      pin: undefined,
+      pinExpires: undefined,
+    });
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
+    const { id } = req.token;
 
     const {
       name,
@@ -88,13 +93,16 @@ export default class UserController {
       phone,
     });
 
-    user.password = '###';
-
-    return res.status(201).json(user);
+    return res.status(201).json({
+      ...user,
+      password: undefined,
+      pin: undefined,
+      pinExpires: undefined,
+    });
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
+    const { id } = req.token;
 
     const deleteUser = container.resolve(DeleteUserService);
 
@@ -102,9 +110,12 @@ export default class UserController {
       id,
     });
 
-    user.password = '###';
-
-    return res.status(201).json(user);
+    return res.status(201).json({
+      ...user,
+      password: undefined,
+      pin: undefined,
+      pinExpires: undefined,
+    });
   }
 
   public async sendPin(req: Request, res: Response): Promise<Response> {
