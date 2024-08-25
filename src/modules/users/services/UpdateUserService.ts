@@ -8,12 +8,14 @@ import IHashProvider from '@shared/container/providers/HashProvider/models/IHash
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  language: string;
-  phone: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  language?: string;
+  phone?: string;
+  image?: string;
+  gender?: string;
+  birthdate?: Date;
 }
 
 @injectable()
@@ -26,23 +28,46 @@ export default class UpdateUserService {
     private hashProvider: IHashProvider,
   ) { }
 
-public async execute({
-  id, name, email, password, language, phone,
-}: IRequest): Promise<Users> {
+public async execute(id: string, updateData: IRequest): Promise<Users> {
     const userAlreadyExists = await this.usersRepository.findById(id);
 
     if (!userAlreadyExists) throw new AppError('User with this id does not exist');
+    if (updateData.email) {
+      const userWithUpdatedEmail = await this.usersRepository.findByEmailWithRelations(updateData.email);
+      if(userWithUpdatedEmail) {
+        if (userWithUpdatedEmail.id == id) {
+          throw new AppError('You cannot update your email to the same email');
+        }
+        if (userWithUpdatedEmail.id !== id) {
+          throw new AppError('User with same email already exists');
+        }
+      }
+    }
+    if(updateData.birthdate || updateData.birthdate == ''){ 
+      const birthdate = new Date(updateData.birthdate);
+      if (isNaN(birthdate.getTime())) {
+        throw new AppError('Birthdate is not a valid date');
+      }
+    
+      if (birthdate > new Date()) {
+        throw new AppError('Birthdate cannot be greater than current date');
+      }
+    }
 
-    const hashedPassword = await this.hashProvider.generateHash(password);
+    const data = { ...userAlreadyExists, ...updateData };
+
+    let hashedPassword;
+    if(data.password){
+      hashedPassword = await this.hashProvider.generateHash(data.password.toString());
+    } else {
+      hashedPassword = data.password;
+    }
 
     const updatedUser = this.usersRepository.update(
     id,
     {
-      name,
-      email: email.toLowerCase(),
+      ...data,
       password: hashedPassword,
-      language,
-      phone,
     });
 
     return updatedUser;

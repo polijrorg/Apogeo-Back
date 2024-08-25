@@ -7,6 +7,9 @@ model Users {
   phone      String
   pin        String?
   pinExpires DateTime?
+  image      String?
+  gender     String?
+  birthdate  DateTime?
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
 }

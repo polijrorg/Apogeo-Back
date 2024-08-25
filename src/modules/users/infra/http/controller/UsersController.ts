@@ -80,18 +80,24 @@ export default class UserController {
       password,
       language,
       phone,
+      image,
+      gender,
+      birthdate,
     } = req.body;
 
     const updateUser = container.resolve(UpdateUserService);
 
-    const user = await updateUser.execute({
+    const user = await updateUser.execute(
       id,
-      name,
+      { name,
       email,
       password,
       language,
       phone,
-    });
+      image,
+      gender,
+      birthdate, }
+    );
 
     return res.status(201).json({
       ...user,
