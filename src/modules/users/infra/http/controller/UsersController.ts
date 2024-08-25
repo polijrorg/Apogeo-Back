@@ -39,24 +39,21 @@ export default class UserController {
   }
 
   public async readAll(req: Request, res: Response): Promise<Response> {
-
     const readUsers = container.resolve(ReadAllUsersService);
 
     const users = await readUsers.execute();
-    
-    return res.status(201).json(users?.map(user => {
-      return {
-        ...user,
-        password: undefined,
-        pin: undefined,
-        pinExpires: undefined,
-      };
-    }));
+
+    return res.status(201).json(users?.map((user) => ({
+      ...user,
+      password: undefined,
+      pin: undefined,
+      pinExpires: undefined,
+    })));
   }
 
   public async readById(req: Request, res: Response): Promise<Response> {
     const { id } = req.token;
-    
+
     const readUser = container.resolve(ReadUserByIdService);
 
     const user = await readUser.execute({
@@ -80,18 +77,26 @@ export default class UserController {
       password,
       language,
       phone,
+      image,
+      gender,
+      birthdate,
     } = req.body;
 
     const updateUser = container.resolve(UpdateUserService);
 
-    const user = await updateUser.execute({
+    const user = await updateUser.execute(
       id,
-      name,
-      email,
-      password,
-      language,
-      phone,
-    });
+      {
+        name,
+        email,
+        password,
+        language,
+        phone,
+        image,
+        gender,
+        birthdate,
+      },
+    );
 
     return res.status(201).json({
       ...user,
@@ -127,7 +132,7 @@ export default class UserController {
       email,
     });
 
-    return res.status(201).json({id: user.id});
+    return res.status(201).json({ id: user.id });
   }
 
   public async verifyPin(req: Request, res: Response): Promise<Response> {
@@ -141,7 +146,7 @@ export default class UserController {
       pin,
     });
 
-    return res.status(201).json({id: user.id});
+    return res.status(201).json({ id: user.id });
   }
 
   public async resetPassword(req: Request, res: Response): Promise<Response> {
@@ -150,9 +155,8 @@ export default class UserController {
 
     const resetPassword = container.resolve(ResetPasswordService);
 
-    const user = await resetPassword.execute({id, pin, password});
+    const user = await resetPassword.execute({ id, pin, password });
 
-    return res.status(201).json({id: user.id});
+    return res.status(201).json({ id: user.id });
   }
-
 }

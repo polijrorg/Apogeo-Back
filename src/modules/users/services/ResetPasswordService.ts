@@ -23,15 +23,15 @@ export default class ResetPasswordService {
     private hashProvider: IHashProvider,
   ) { }
 
-public async execute({
-  id,
-  pin,
-  password,
-}: IRequest): Promise<Users> {
+  public async execute({
+    id,
+    pin,
+    password,
+  }: IRequest): Promise<Users> {
     const userAlreadyExists = await this.usersRepository.findById(id);
 
     if (!userAlreadyExists) throw new AppError('User with this id does not exist');
-    
+
     if (userAlreadyExists?.pinExpires && userAlreadyExists.pin != pin) throw new AppError('Pin is incorrect');
     if (userAlreadyExists?.pinExpires && userAlreadyExists.pinExpires < new Date()) throw new AppError('Pin is expired');
 
