@@ -13,7 +13,6 @@ export default class ReadAllUsersService {
   ) { }
 
   public async execute(): Promise<Users[] | null> {
-
     const users = this.usersRepository.findAll();
 
     return users;

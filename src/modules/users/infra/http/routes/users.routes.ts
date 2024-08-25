@@ -16,5 +16,4 @@ usersRoutes.post('/send-pin', usersController.sendPin);
 usersRoutes.post('/verify-pin/:id', usersController.verifyPin);
 usersRoutes.post('/reset-password/:id', usersController.resetPassword);
 
-
 export default usersRoutes;

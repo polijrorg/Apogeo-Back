@@ -61,7 +61,6 @@ export default class UsersRepository implements IUsersRepository {
       where: { email },
       data: { pin, pinExpires },
     });
-
   }
 
   public resetPassword(id: string, password: string): Promise<Users> {
@@ -70,5 +69,4 @@ export default class UsersRepository implements IUsersRepository {
       data: { password },
     });
   }
-
 }

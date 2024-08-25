@@ -23,7 +23,7 @@ export default class SendPinToUserEmailService {
   }: IRequest): Promise<Users> {
     const userAlreadyExists = await this.usersRepository.findByEmailWithRelations(email);
     if (!userAlreadyExists) throw new AppError('User with this email does not exist');
-    
+
     const expiration = 15;
     const pin = Math.floor(Math.random() * 9999).toString();
     const data = new Date();
@@ -34,13 +34,13 @@ export default class SendPinToUserEmailService {
       data,
     );
 
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
     const msg = {
-      to: email, 
-      from: 'tassyla.lima@polijunior.com.br', 
+      to: email,
+      from: 'tassyla.lima@polijunior.com.br',
       subject: 'Apogeo | Recuperação de senha',
-      text: user.name + ', seu pin para recuperação de senha é: ' + pin + '. O processo de recuperação expira em ' + expiration + ' minutos.',
-      html: user.name + ', seu pin para recuperação de senha é: <strong>' + pin + '</strong>. O processo de recuperação expira em ' + expiration + ' minutos.',
+      text: `${user.name}, seu pin para recuperação de senha é: ${pin}. O processo de recuperação expira em ${expiration} minutos.`,
+      html: `${user.name}, seu pin para recuperação de senha é: <strong>${pin}</strong>. O processo de recuperação expira em ${expiration} minutos.`,
     };
 
     try {
