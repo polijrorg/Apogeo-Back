@@ -67,6 +67,7 @@ public async execute(id: string, updateData: IRequest): Promise<Users> {
     id,
     {
       ...data,
+      email: data.email?.toLowerCase(),
       password: hashedPassword,
     });
 
