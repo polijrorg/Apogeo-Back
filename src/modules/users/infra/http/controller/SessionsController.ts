@@ -15,8 +15,14 @@ export default class SessionsController {
 
     const { user, token } = await authenticateUser.execute({ email, password, rememberMe });
 
-    user.password = '###';
+    const ommitedUser = ({
+      ...user,
+      password: undefined,
+      pin: undefined,
+      pinExpires: undefined,
+      pedigree: undefined,
+    });
 
-    return res.json({ user, token });
+    return res.json({ ommitedUser, token });
   }
 }

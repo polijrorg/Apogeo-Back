@@ -16,6 +16,7 @@ interface IRequest {
   image?: string;
   gender?: string;
   birthdate?: Date;
+  pedigree?: JSON;
 }
 
 @injectable()
