@@ -35,6 +35,7 @@ export default class UserController {
       password: undefined,
       pin: undefined,
       pinExpires: undefined,
+      pedigree: undefined,
     });
   }
 
@@ -48,6 +49,7 @@ export default class UserController {
       password: undefined,
       pin: undefined,
       pinExpires: undefined,
+      pedigree: undefined,
     })));
   }
 
@@ -65,6 +67,7 @@ export default class UserController {
       password: undefined,
       pin: undefined,
       pinExpires: undefined,
+      pedigree: undefined,
     });
   }
 
@@ -80,6 +83,7 @@ export default class UserController {
       image,
       gender,
       birthdate,
+      pedigree,
     } = req.body;
 
     const updateUser = container.resolve(UpdateUserService);
@@ -95,6 +99,7 @@ export default class UserController {
         image,
         gender,
         birthdate,
+        pedigree,
       },
     );
 
@@ -103,6 +108,7 @@ export default class UserController {
       password: undefined,
       pin: undefined,
       pinExpires: undefined,
+      pedigree: undefined,
     });
   }
 
@@ -120,6 +126,7 @@ export default class UserController {
       password: undefined,
       pin: undefined,
       pinExpires: undefined,
+      pedigree: undefined,
     });
   }
 

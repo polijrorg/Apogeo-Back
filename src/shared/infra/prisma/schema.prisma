@@ -20,6 +20,7 @@ model Users {
   image      String?
   gender     String?
   birthdate  DateTime?
+  pedigree   Json?
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
 }
