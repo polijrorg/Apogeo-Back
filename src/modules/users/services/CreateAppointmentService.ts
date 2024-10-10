@@ -30,7 +30,7 @@ export default class CreateAppointmentService {
     const formatDate = (date: number) => date.toString().padStart(2, '0');
 
     const msg = {
-      to: "tatitassyla@gmail.com",
+      to: "lucas.aguiar@polijunior.com.br",
       from: 'tassyla.lima@polijunior.com.br',
       subject: 'Apogeo | Solicitação de consulta médica',
       text: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formatDate(date.getDate())}/${formatDate(date.getMonth()+1)}/${date.getFullYear()}</strong> às <strong>${formatDate(date.getHours())}:${formatDate(date.getMinutes())}</strong>.<br><br><strong>Informações do usuário</strong><br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + user.birthdate + "<br>" : ""}`,
