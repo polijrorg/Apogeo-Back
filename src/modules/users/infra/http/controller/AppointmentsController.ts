@@ -7,13 +7,11 @@ export default class AppointmentsController {
 
   public async create(req: Request, res: Response): Promise<Response> {
     const { id } = req.token;
-    const { date } = req.body;
 
     const readUser = container.resolve(CreateAppointmentService);
 
     const user = await readUser.execute({
       id,
-      date
     });
 
     return res.status(201).json({
