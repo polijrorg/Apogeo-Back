@@ -9,7 +9,6 @@ import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
   id: string;
-  date: Date;
 }
 
 @injectable()
@@ -20,20 +19,22 @@ export default class CreateAppointmentService {
   ) { }
 
   public async execute({
-    id, date
+    id
   }: IRequest): Promise<Users> {
     const user = await this.usersRepository.findById(id);
     if (!user) throw new AppError('This user does not exist');
 
-    date = new Date(date);
+    const date = new Date();
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+    const formatDate = (date: number) => date.toString().padStart(2, '0');
+
     const msg = {
       to: "lucas.aguiar@polijunior.com.br",
       from: 'tassyla.lima@polijunior.com.br',
       subject: 'Apogeo | Solicitação de consulta médica',
-      text: `João, o usuário ${user.name} solicitou uma consulta médica no dia ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} às ${date.getHours()}:${date.getMinutes()}.<br><br><strong>Dados do paciente</strong><br>Nome: ${user.name}<br>Telefone: ${user.phone}<br>Email: ${user.email}<br><br><strong>Data proposta</strong><br>Data: ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}<br>Horário: ${date.getHours()}:${date.getMinutes()}`,
-      html: `João, o usuário ${user.name} solicitou uma consulta médica no dia ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} às ${date.getHours()}:${date.getMinutes()}.<br><br><strong>Dados do paciente</strong><br>Nome: ${user.name}<br>Telefone: ${user.phone}<br>Email: ${user.email}<br><br><strong>Data proposta</strong><br>Data: ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}<br>Horário: ${date.getHours()}:${date.getMinutes()}`,
+      text: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formatDate(date.getDate())}/${formatDate(date.getMonth()+1)}/${date.getFullYear()}</strong> às <strong>${formatDate(date.getHours())}:${formatDate(date.getMinutes())}</strong>.<br><br><strong>Informações do usuário</strong><br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + user.birthdate + "<br>" : ""}`,
+      html: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formatDate(date.getDate())}/${formatDate(date.getMonth()+1)}/${date.getFullYear()}</strong> às <strong>${formatDate(date.getHours())}:${formatDate(date.getMinutes())}</strong>.<br><br><strong>Informações do usuário</strong><br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + user.birthdate + "<br>" : ""}`,
     };
 
     try {
@@ -42,7 +43,6 @@ export default class CreateAppointmentService {
     } catch (error: any) {
       console.error(error);
     }
-
     return user;
   }
 }
