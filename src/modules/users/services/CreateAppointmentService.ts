@@ -6,6 +6,7 @@ import { Users } from '@prisma/client';
 import AppError from '@shared/errors/AppError';
 
 import IUsersRepository from '../repositories/IUsersRepository';
+import moment from 'moment';
 
 interface IRequest {
   id: string;
@@ -24,17 +25,18 @@ export default class CreateAppointmentService {
     const user = await this.usersRepository.findById(id);
     if (!user) throw new AppError('This user does not exist');
 
-    const date = new Date();
+    const formattedDate = moment().locale('pt-br').format('DD/MM/YYYY');
+    const formattedTime = moment().locale('pt-br').format('HH:mm');
+    const formattedBirthdate = moment(user.birthdate, 'DD/MM/YYYY').locale('pt-br').format('DD/MM/YYYY');
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
-    const formatDate = (date: number) => date.toString().padStart(2, '0');
 
     const msg = {
-      to: "lucas.aguiar@polijunior.com.br",
+      to: "tatitassyla@gmail.com",
       from: 'tassyla.lima@polijunior.com.br',
       subject: 'Apogeo | Solicitação de consulta médica',
-      text: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formatDate(date.getDate())}/${formatDate(date.getMonth()+1)}/${date.getFullYear()}</strong> às <strong>${formatDate(date.getHours())}:${formatDate(date.getMinutes())}</strong>.<br><br><strong>Informações do usuário</strong><br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + user.birthdate + "<br>" : ""}`,
-      html: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formatDate(date.getDate())}/${formatDate(date.getMonth()+1)}/${date.getFullYear()}</strong> às <strong>${formatDate(date.getHours())}:${formatDate(date.getMinutes())}</strong>.<br><br><strong>Informações do usuário</strong><br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + user.birthdate + "<br>" : ""}`,
+      text: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formattedDate}</strong> às <strong>${formattedTime}</strong>.<br><br><strong>Informações do usuário</strong><br>Nome: ${user.name}<br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + formattedBirthdate + "<br>" : ""}`,
+      html: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formattedDate}</strong> às <strong>${formattedTime}</strong>.<br><br><strong>Informações do usuário</strong><br>Nome: ${user.name}<br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + formattedBirthdate + "<br>" : ""}`,
     };
 
     try {
