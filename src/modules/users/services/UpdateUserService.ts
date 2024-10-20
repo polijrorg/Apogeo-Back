@@ -7,13 +7,21 @@ import AppError from '@shared/errors/AppError';
 import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import sharp from 'sharp';
+
+const bucketName = process.env.BUCKET_NAME
+const bucketRegion = process.env.BUCKET_REGION
+const accessKey = process.env.ACCESS_KEY
+const secretAccessKey = process.env.SECRET_ACCESS_KEY
+
 interface IRequest {
   name?: string;
   email?: string;
   password?: string;
   language?: string;
   phone?: string;
-  image?: string;
+  image?: Buffer;
   gender?: string;
   birthdate?: Date;
   pedigree?: JSON;
@@ -62,6 +70,35 @@ export default class UpdateUserService {
       hashedPassword = await this.hashProvider.generateHash(data.password.toString());
     } else {
       hashedPassword = data.password;
+    }
+
+    if(!data.pedigree) {
+      const s3 = new S3Client({
+        region: bucketRegion,
+        credentials: {
+          accessKeyId: accessKey as string,
+          secretAccessKey: secretAccessKey as string
+        }
+      });
+
+      if (data.image && s3) {
+        
+        const buffer = await sharp(data.image).resize({height: 300, width: 300, fit: 'contain'}).png().toBuffer();
+
+        const params = {
+          Bucket: bucketName,
+          Key: `${id}.png`,
+          Body: buffer,
+          ContentType: 'image/png',
+        };
+
+        try {
+          await s3.send(new PutObjectCommand(params));
+          data.image = `${id}.png`;
+        } catch (error: any) {
+          throw new AppError('Error uploading image to S3');
+        }
+      }
     }
 
     const updatedUser = this.usersRepository.update(

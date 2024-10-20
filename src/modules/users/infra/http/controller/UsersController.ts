@@ -9,6 +9,7 @@ import UpdateUserService from '@modules/users/services/UpdateUserService';
 import SendPinToUserEmailService from '@modules/users/services/SendPinToUserEmailService';
 import VerifyPinService from '@modules/users/services/VerifyPinService';
 import ResetPasswordService from '@modules/users/services/ResetPasswordService';
+import generateUserImageUrl from '@shared/infra/http/middlewares/GenerateUserImageUrl';
 
 export default class UserController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -68,6 +69,7 @@ export default class UserController {
       pin: undefined,
       pinExpires: undefined,
       pedigree: undefined,
+      image: user ? await generateUserImageUrl(user) : null,
     });
   }
 
@@ -80,11 +82,12 @@ export default class UserController {
       password,
       language,
       phone,
-      image,
       gender,
       birthdate,
       pedigree,
     } = req.body;
+
+    const image = req.file ? req.file.buffer : undefined;
 
     const updateUser = container.resolve(UpdateUserService);
 
@@ -109,6 +112,7 @@ export default class UserController {
       pin: undefined,
       pinExpires: undefined,
       pedigree: undefined,
+      image: user ? await generateUserImageUrl(user) : null,
     });
   }
 

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
+import generateUserImageUrl from '@shared/infra/http/middlewares/GenerateUserImageUrl';
 
 export default class SessionsController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -21,6 +22,7 @@ export default class SessionsController {
       pin: undefined,
       pinExpires: undefined,
       pedigree: undefined,
+      image: user ? await generateUserImageUrl(user) : null,
     });
 
     return res.json({ ommitedUser, token });
