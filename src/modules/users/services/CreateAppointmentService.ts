@@ -6,7 +6,7 @@ import { Users } from '@prisma/client';
 import AppError from '@shared/errors/AppError';
 
 import IUsersRepository from '../repositories/IUsersRepository';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 interface IRequest {
   id: string;
@@ -25,8 +25,8 @@ export default class CreateAppointmentService {
     const user = await this.usersRepository.findById(id);
     if (!user) throw new AppError('This user does not exist');
 
-    const formattedDate = moment().locale('pt-br').format('DD/MM/YYYY');
-    const formattedTime = moment().locale('pt-br').format('HH:mm');
+    const formattedDate = moment().tz("America/Sao_Paulo").format('DD/MM/YYYY');
+    const formattedTime = moment().tz("America/Sao_Paulo").format('HH:mm');
     const formattedBirthdate = moment(user.birthdate, 'DD/MM/YYYY').locale('pt-br').format('DD/MM/YYYY');
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
