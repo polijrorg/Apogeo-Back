@@ -15,7 +15,7 @@ export default class PedigreeController {
       id,
     });
 
-    return res.status(201).json(user.pedigree);
+    return res.status(201).json(user?.pedigree);
   }
 
   public async save(req: Request, res: Response): Promise<Response> {
