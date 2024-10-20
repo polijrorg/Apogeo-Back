@@ -4,9 +4,9 @@ interface IUpdateUserDTO {
   password?: string;
   language?: string;
   phone?: string;
-  image?: string;
-  gender?: string;
-  birthdate?: Date;
+  image?: string | Buffer | null;
+  gender?: string | null;
+  birthdate?: Date | null;
 }
 
 export default IUpdateUserDTO;
