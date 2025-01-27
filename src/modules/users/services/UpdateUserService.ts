@@ -42,7 +42,7 @@ export default class UpdateUserService {
 
     if (!userAlreadyExists) throw new AppError('User with this id does not exist');
     if (updateData.email) {
-      const userWithUpdatedEmail = await this.usersRepository.findByEmailWithRelations(updateData.email);
+      const userWithUpdatedEmail = await this.usersRepository.findByEmailWithRelations(updateData.email.toLowerCase());
       if (userWithUpdatedEmail) {
         if (userWithUpdatedEmail.id == id) {
           throw new AppError('You cannot update your email to the same email');

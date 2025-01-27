@@ -10,7 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage});
 
 usersRoutes.post('/register', usersController.create);
-usersRoutes.patch('/update',upload.single('image'), ensureAuthenticated, usersController.update);
+usersRoutes.patch('/update', upload.single('image'), ensureAuthenticated, usersController.update);
 usersRoutes.delete('/delete', ensureAuthenticated, usersController.delete);
 usersRoutes.get('/readAll', usersController.readAll);
 usersRoutes.get('/read', ensureAuthenticated, usersController.readById);
