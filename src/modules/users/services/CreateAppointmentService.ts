@@ -32,8 +32,8 @@ export default class CreateAppointmentService {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
 
     const msg = {
-      to: "lucas.aguiar@polijunior.com.br",
-      from: 'tassyla.lima@polijunior.com.br',
+      to: "dr.joaosiufi@gmail.com",
+      from: 'dr.joaosiufi@gmail.com',
       subject: 'Apogeo | Solicitação de consulta médica',
       text: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formattedDate}</strong> às <strong>${formattedTime}</strong>.<br><br><strong>Informações do usuário</strong><br>Nome: ${user.name}<br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + formattedBirthdate + "<br>" : ""}`,
       html: `João, o usuário ${user.name} solicitou uma consulta médica. <br><br>Pedido realizado em <strong>${formattedDate}</strong> às <strong>${formattedTime}</strong>.<br><br><strong>Informações do usuário</strong><br>Nome: ${user.name}<br>Email: ${user.email}<br>Telefone: ${user.phone}<br>Idioma: ${user.language}<br>${user.gender != null ? "Gênero: "+ user.gender + "<br>": ""}${user.birthdate ? "Data de Nascimento: " + formattedBirthdate + "<br>" : ""}`,

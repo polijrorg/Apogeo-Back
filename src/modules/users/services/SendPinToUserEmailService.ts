@@ -37,7 +37,7 @@ export default class SendPinToUserEmailService {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
     const msg = {
       to: email,
-      from: 'tassyla.lima@polijunior.com.br',
+      from: 'dr.joaosiufi@gmail.com',
       subject: 'Apogeo | Recuperação de senha',
       text: `${user.name}, seu pin para recuperação de senha é: ${pin}. O processo de recuperação expira em ${expiration} minutos.`,
       html: `${user.name}, seu pin para recuperação de senha é: <strong>${pin}</strong>. O processo de recuperação expira em ${expiration} minutos.`,
